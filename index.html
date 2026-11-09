@@ -87,16 +87,28 @@
       <div class="tool-head">道具 <span>TOOLS</span></div>
       <div class="tool-grid">
         <button class="tool-btn" id="tool-shuffle" type="button" title="重排棋盘，不消耗步数">
-          <b>洗牌</b><em>×1</em><small>重排棋盘</small>
+          <span class="tool-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7h3.8l9.2 10h3.5"/><path d="M3.5 17h3.8l9.2-10h3.5"/><path d="M17.6 4.2 20.8 7l-3.2 2.8"/><path d="M17.6 14.2 20.8 17l-3.2 2.8"/></svg>
+          </span>
+          <b>洗牌</b>
+          <em>×1</em>
         </button>
         <button class="tool-btn" id="tool-col" type="button" title="选择一列，整列消除">
-          <b>清列</b><em>×1</em><small>选一列</small>
+          <span class="tool-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="3.5" width="7" height="4.6" rx="1.2"/><rect x="8.5" y="9.7" width="7" height="4.6" rx="1.2"/><path d="M12 16.4v3.4"/><path d="m9.9 18.2 2.1 2.1 2.1-2.1"/></svg>
+          </span>
+          <b>清列</b>
+          <em>×1</em>
         </button>
         <button class="tool-btn" id="tool-row" type="button" title="选择一行，整行消除">
-          <b>清行</b><em>×1</em><small>选一行</small>
+          <span class="tool-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8.5" width="4.6" height="7" rx="1.2"/><rect x="9.7" y="8.5" width="4.6" height="7" rx="1.2"/><path d="M16.4 12h3.4"/><path d="m18.2 9.9 2.1 2.1-2.1 2.1"/></svg>
+          </span>
+          <b>清行</b>
+          <em>×1</em>
         </button>
       </div>
-      <p class="tool-note" id="tool-note">清列 / 清行会消耗 1 步</p>
+      <p class="tool-note" id="tool-note">洗牌：重排全部棋子，免费。清列 / 清行：点选棋盘任意格，清掉整列 / 整行，各花 1 步，并震裂线上的锁。</p>
     </div>
 
     <div class="quote" id="quote">第 7 次循环。你记得这条时间线会在第 19 步崩坏。</div>

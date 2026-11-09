@@ -565,8 +565,8 @@ button:focus-visible,
 .tool-box {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px 14px;
+  gap: 9px;
+  padding: 13px 14px 12px;
   border: 1px solid rgba(92, 225, 255, 0.16);
   border-radius: 14px;
   background:
@@ -592,54 +592,97 @@ button:focus-visible,
 .tool-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+  gap: 7px;
 }
 
 .tool-btn {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   min-width: 0;
   padding: 8px 4px 7px;
+  overflow: hidden;
   border: 1px solid rgba(154, 169, 255, 0.16);
-  border-radius: 9px;
-  background: rgba(12, 15, 28, 0.72);
+  border-radius: 10px;
+  background:
+    linear-gradient(160deg, rgba(154, 169, 255, 0.09), rgba(10, 12, 22, 0.82));
   color: var(--text);
+  text-align: left;
   transition: 0.16s ease;
+}
+
+.tool-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.095), transparent 48%);
+}
+
+.tool-ico {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border: 1px solid rgba(92, 225, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(92, 225, 255, 0.09);
+  color: var(--cyan);
+  box-shadow: 0 0 12px rgba(92, 225, 255, 0.08) inset;
+}
+
+.tool-ico svg {
+  width: 16px;
+  height: 16px;
 }
 
 .tool-btn b {
   font-size: 12px;
+  line-height: 1.1;
   letter-spacing: 0.06em;
 }
 
 .tool-btn em {
+  position: absolute;
+  top: 5px;
+  right: 5px;
   font-style: normal;
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 8px;
+  line-height: 1;
+  padding: 1px 3px;
+  border: 1px solid rgba(92, 225, 255, 0.16);
+  border-radius: 4px;
+  background: rgba(92, 225, 255, 0.08);
   color: var(--cyan);
 }
 
 .tool-btn small {
-  max-width: 100%;
-  overflow: hidden;
-  font-size: 8px;
-  letter-spacing: 0.04em;
-  color: var(--muted-2);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: none;
 }
 
 .tool-btn:hover:not(:disabled) {
   border-color: rgba(92, 225, 255, 0.42);
-  background: rgba(92, 225, 255, 0.08);
+  background: linear-gradient(160deg, rgba(92, 225, 255, 0.13), rgba(92, 225, 255, 0.05));
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.24);
+}
+
+.tool-btn:hover:not(:disabled) .tool-ico {
+  border-color: rgba(92, 225, 255, 0.5);
+  box-shadow: 0 0 16px rgba(92, 225, 255, 0.16) inset;
 }
 
 .tool-btn.active {
   border-color: var(--cyan);
   background: rgba(92, 225, 255, 0.14);
   box-shadow: 0 0 18px rgba(92, 225, 255, 0.18) inset;
+}
+
+.tool-btn.active .tool-ico {
+  background: rgba(92, 225, 255, 0.2);
+  border-color: var(--cyan);
 }
 
 .tool-btn:disabled {
@@ -649,9 +692,11 @@ button:focus-visible,
 
 .tool-note {
   margin: 0;
-  font-size: 9px;
-  line-height: 1.5;
-  color: var(--muted-2);
+  padding-top: 7px;
+  border-top: 1px solid rgba(154, 169, 255, 0.08);
+  font-size: 9.5px;
+  line-height: 1.55;
+  color: var(--muted);
 }
 
 .quote {

@@ -1664,7 +1664,7 @@
         ? S.toolMode === 'col'
           ? '点击棋盘选择一列 · 再点一次「清列」取消'
           : '点击棋盘选择一行 · 再点一次「清行」取消'
-        : '清列 / 清行会消耗 1 步';
+        : '洗牌：重排全部棋子，免费。清列 / 清行：点选棋盘任意格，清掉整列 / 整行，各花 1 步，并震裂线上的锁。';
     }
     els.sandDots.innerHTML = '';
     for (let i = 0; i < MAX_SAND; i++) {
@@ -2255,15 +2255,61 @@
     ctx.fill();
     ctx.shadowBlur = 0;
 
-    ctx.lineWidth = 1.1;
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-    ctx.stroke();
+    // glass gloss: clip to the gem, then lay sheen + bounce light inside
+    ctx.save();
+    shapePath(g.type, s);
+    ctx.clip();
 
-    // facet highlight
+    const sheen = ctx.createLinearGradient(0, -s, 0, s * 0.55);
+    sheen.addColorStop(0, 'rgba(255, 255, 255, 0.52)');
+    sheen.addColorStop(0.34, 'rgba(255, 255, 255, 0.15)');
+    sheen.addColorStop(0.72, 'rgba(255, 255, 255, 0.03)');
+    sheen.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    ctx.fillStyle = sheen;
+    ctx.fillRect(-s, -s, s * 2, s * 2);
+
+    const bloom = ctx.createRadialGradient(
+      -s * 0.34, -s * 0.44, s * 0.04,
+      -s * 0.34, -s * 0.44, s * 1.1
+    );
+    bloom.addColorStop(0, 'rgba(255, 255, 255, 0.34)');
+    bloom.addColorStop(0.4, 'rgba(255, 255, 255, 0.05)');
+    bloom.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    ctx.fillStyle = bloom;
+    ctx.fillRect(-s, -s, s * 2, s * 2);
+
+    const bounce = ctx.createLinearGradient(0, s * 0.25, 0, s);
+    bounce.addColorStop(0, 'rgba(255, 255, 255, 0)');
+    bounce.addColorStop(0.72, 'rgba(255, 255, 255, 0.015)');
+    bounce.addColorStop(1, def.light + '2e');
+    ctx.fillStyle = bounce;
+    ctx.fillRect(-s, -s, s * 2, s * 2);
+
+    // tight specular + pinpoint
     ctx.beginPath();
-    ctx.ellipse(-s * 0.3, -s * 0.34, s * 0.36, s * 0.19, -0.55, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.32)';
+    ctx.ellipse(-s * 0.3, -s * 0.4, s * 0.28, s * 0.11, -0.55, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.78)';
+    ctx.shadowColor = 'rgba(255, 255, 255, 0.7)';
+    ctx.shadowBlur = 7;
     ctx.fill();
+    ctx.shadowBlur = 0;
+
+    ctx.beginPath();
+    ctx.arc(-s * 0.5, -s * 0.5, s * 0.045, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+    ctx.fill();
+    ctx.restore();
+
+    // polished rim, brightest along the top edge
+    shapePath(g.type, s);
+    const rim = ctx.createLinearGradient(0, -s, 0, s);
+    rim.addColorStop(0, 'rgba(255, 255, 255, 0.72)');
+    rim.addColorStop(0.42, 'rgba(255, 255, 255, 0.13)');
+    rim.addColorStop(0.78, 'rgba(255, 255, 255, 0.2)');
+    rim.addColorStop(1, 'rgba(255, 255, 255, 0.4)');
+    ctx.strokeStyle = rim;
+    ctx.lineWidth = 1.35;
+    ctx.stroke();
 
     // inner glyph for readability
     ctx.strokeStyle = 'rgba(12, 12, 24, 0.28)';
