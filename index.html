@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#05060c" />
+<meta name="description" content="倒带三消：时间回溯是资源的三消游戏。倒带改写分支，撕开时间裂缝，冻结时间随意摆盘，拆时间锁、清倒计时锁，再用洗牌/清列/清行和 L/T 时间塌缩杀出重围。" />
+<meta property="og:title" content="倒带三消 · REWIND // MATCH" />
+<meta property="og:description" content="一款把「时间回溯」做成消耗品的三消游戏：倒带改写分支，裂缝触发时停，晶体补充时砂，时间锁拦住去路；教学关 + 四关，含三种道具和 L/T 时间塌缩。" />
+<meta property="og:type" content="website" />
+<title>倒带三消 · REWIND // MATCH</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23090b16'/%3E%3Cpath d='M18 32a14 14 0 1 0 4-9.9' fill='none' stroke='%23ffc857' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M16 14v11h11' fill='none' stroke='%23ff4fd8' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">◀◀</div>
+    <div>
+      <h1>倒带三消</h1>
+      <p>REWIND // MATCH</p>
+    </div>
+  </div>
+  <div class="top-mid">
+    <span class="chip" id="level-chip">记忆碎片 01 · 残响</span>
+    <span class="chip ghost" id="best-chip">BEST 0</span>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="tutorial-btn" type="button" title="重看教学">教学</button>
+    <button class="icon-btn" id="sound-btn" type="button" title="开关音效 (M)">♪ 音效</button>
+    <button class="icon-btn" id="help-btn" type="button" title="玩法说明 (H)">玩法</button>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- ============ LEFT PANEL ============ -->
+  <aside class="panel left" aria-label="任务面板">
+    <div class="panel-label" id="mission-label">MISSION 01</div>
+
+    <div class="score-block">
+      <span class="label">SCORE</span>
+      <div class="score" id="score">0</div>
+      <div class="target-line"><span>目标</span><b id="target">3,200</b></div>
+      <div class="progress"><i id="progress"></i></div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat">
+        <span>剩余步数</span>
+        <b id="steps">30</b>
+      </div>
+      <div class="stat">
+        <span>时砂</span>
+        <b id="sand">3</b>
+        <div class="sand-dots" id="sand-dots" aria-hidden="true"></div>
+      </div>
+      <div class="stat">
+        <span>裂缝</span>
+        <b id="cracks">0</b>
+      </div>
+    </div>
+
+    <div class="goals" id="goals" aria-label="过关目标">
+      <div class="goal-head">过关条件 <span>OBJECTIVES</span></div>
+      <div class="goal-row" id="goal-score-row">
+        <i class="goal-dot" aria-hidden="true"></i><span>目标分数</span><b id="goal-score-val">0 / 3,200</b>
+      </div>
+      <div class="goal-row" id="goal-lock-row">
+        <i class="goal-dot" aria-hidden="true"></i><span>清除时间锁</span><b id="goal-lock-val">0 / 3</b>
+      </div>
+      <div class="goal-row" id="goal-crystal-row" hidden>
+        <i class="goal-dot" aria-hidden="true"></i><span>收集时间晶体</span><b id="goal-crystal-val">0 / 1</b>
+      </div>
+    </div>
+
+    <div class="rewind-box">
+      <div class="rw-top"><span>时间倒带</span><em>−1 时砂</em></div>
+      <p>回到上一步，带着记忆重新选择。</p>
+      <button id="rewind-btn" class="rewind-btn" type="button" disabled>
+        <span>◀◀ 倒带</span><kbd>Z</kbd>
+      </button>
+    </div>
+
+    <div class="tool-box" id="tool-box" aria-label="道具">
+      <div class="tool-head">道具 <span>TOOLS</span></div>
+      <div class="tool-grid">
+        <button class="tool-btn" id="tool-shuffle" type="button" title="重排棋盘，不消耗步数">
+          <b>洗牌</b><em>×1</em><small>重排棋盘</small>
+        </button>
+        <button class="tool-btn" id="tool-col" type="button" title="选择一列，整列消除">
+          <b>清列</b><em>×1</em><small>选一列</small>
+        </button>
+        <button class="tool-btn" id="tool-row" type="button" title="选择一行，整行消除">
+          <b>清行</b><em>×1</em><small>选一行</small>
+        </button>
+      </div>
+      <p class="tool-note" id="tool-note">清列 / 清行会消耗 1 步</p>
+    </div>
+
+    <div class="quote" id="quote">第 7 次循环。你记得这条时间线会在第 19 步崩坏。</div>
+
+    <div class="runstats">
+      <span>分支 <b id="branches">0</b></span>
+      <span>时停 <b id="freezes">0</b></span>
+      <span>连击 <b id="maxchain">1</b></span>
+    </div>
+  </aside>
+
+  <!-- ============ STAGE ============ -->
+  <section class="stage" id="stage" aria-label="游戏棋盘">
+    <canvas id="game" width="840" height="840" aria-label="倒带三消棋盘"></canvas>
+
+    <div class="banner" id="banner" role="status" aria-live="polite">
+      <strong></strong><span></span>
+    </div>
+
+    <div class="coach" id="coach" role="status" aria-live="polite">
+      <div><b id="coach-title"></b><p id="coach-text"></p></div>
+      <button id="coach-ok" type="button">知道了</button>
+    </div>
+
+    <div class="freeze-hud" id="freeze-hud">
+      <div class="freeze-label"><span>❄ TIME FROZEN</span><b id="freeze-secs">3.0s</b></div>
+      <div class="freeze-bar"><i id="freeze-bar"></i></div>
+      <p>自由交换，不计步数 · 结束时全体结算</p>
+    </div>
+
+    <div class="vhs" id="vhs" aria-hidden="true">
+      <div class="vhs-lines"></div>
+      <div class="vhs-label">◀◀ REWIND</div>
+    </div>
+  </section>
+
+  <!-- ============ RIGHT PANEL ============ -->
+  <aside class="panel right" aria-label="机制说明">
+    <div class="panel-label">MECHANICS</div>
+
+    <div class="mech">
+      <div class="mech-ico amber">01</div>
+      <div>
+        <h3>倒带 · 分支</h3>
+        <p>消耗 <em>1 时砂</em> 回到上一步：分数、步数、方块全部回退。然后，换一条路。</p>
+      </div>
+    </div>
+
+    <div class="mech">
+      <div class="mech-ico magenta">02</div>
+      <div>
+        <h3>连续倒带 · 裂缝</h3>
+        <p>连续倒带会在棋盘上叠加<em>时间裂缝</em>。裂缝不会消失，直到它被消除。</p>
+      </div>
+    </div>
+
+    <div class="mech">
+      <div class="mech-ico cyan">03</div>
+      <div>
+        <h3>消除裂缝 · 时停</h3>
+        <p>消掉带裂缝的方块，冻结时间 <em>3 秒</em>。在静止棋盘上随意交换，不计步数。</p>
+      </div>
+    </div>
+
+    <div class="mech">
+      <div class="mech-ico amber">04</div>
+      <div>
+        <h3>四连 · 时间晶体</h3>
+        <p>四连生成<em>时间晶体</em>。消掉它，补回 1 时砂，让循环继续。</p>
+      </div>
+    </div>
+
+    <div class="mech">
+      <div class="mech-ico cyan">05</div>
+      <div>
+        <h3>时间锁 · 路障</h3>
+        <p>锁住的方块不能交换，也不参与消除。消掉它<em>旁边</em>的方块可以震裂锁，清完全部时间锁才能过关。红色倒计时锁归零会崩解并留下裂缝。</p>
+      </div>
+    </div>
+
+    <div class="mech">
+      <div class="mech-ico magenta">06</div>
+      <div>
+        <h3>交叉 · 时间塌缩</h3>
+        <p>同一次消除里拼出 <em>L / T 形交叉</em>，触发时间塌缩：以交叉点为中心清除周围 3×3 的方块。</p>
+      </div>
+    </div>
+
+    <div class="log-box">
+      <div class="log-head">时间日志 <span>TIME LOG</span></div>
+      <ul id="log"></ul>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span><kbd>拖动</kbd> 交换相邻方块</span><span class="dot"></span>
+  <span><kbd>Z</kbd> 倒带</span><span class="dot"></span>
+  <span><kbd>R</kbd> 重开</span><span class="dot"></span>
+  <span><kbd>H</kbd> 玩法</span><span class="dot"></span>
+  <span>时间不是背景，是弹药。</span>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="游戏弹窗">
+  <div class="modal-card" id="modal-card"></div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
