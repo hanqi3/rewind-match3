@@ -99,38 +99,3 @@ cd rewind-match3
 python3 -m http.server 8123
 # 浏览器打开 http://127.0.0.1:8123/
 ```
-
-## 怎么让别人玩
-
-### A. 直接发文件（最省事）
-
-发 `dist/倒带三消-单文件版.html` 给对方（微信、QQ、邮件、网盘都行）。对方下载后用 Chrome / Edge / Safari 打开即可，不用装任何东西。
-
-也可以把整个 `rewind-match3` 文件夹打成 zip 发过去，对方解压后双击 `index.html`。
-
-已经打包好的现成版本：`dist/倒带三消-完整版.zip`（含源码、说明、截图和启动脚本）。
-
-### B. 同一个 Wi-Fi 一起玩
-
-1. 本机双击 `启动游戏.bat`；
-2. 在命令行窗口里看本机 IP（或运行 `ipconfig`，找 `IPv4 地址`，例如 `192.168.1.23`）；
-3. 让同一个 Wi-Fi 下的朋友访问 `http://192.168.1.23:8123/`；
-4. 第一次运行时 Windows 防火墙可能弹窗，选择「允许访问」。
-
-### C. 发到公网，谁都能玩
-
-- **Netlify Drop**（最快，不用注册也能试）：打开 <https://app.netlify.com/drop>，把 `rewind-match3` 文件夹拖进去，几秒后得到一个网址。
-- **GitHub Pages**：新建仓库，上传 `index.html`、`style.css`、`game.js`，在 Settings → Pages 里选择 `main` 分支根目录，得到 `https://用户名.github.io/仓库名/`。
-- **itch.io**：New project → Kind of project 选 `HTML`，把 `dist/rewind-match3-itch.zip`（`index.html` 在压缩包根目录）上传，勾选 “This file will be played in the browser”。
-
-### D. 改完代码后重新生成单文件版
-
-```bash
-node build-single.js
-```
-
-会生成：
-
-- `dist/index.html` — 内联了 CSS / JS 的单文件版
-- `dist/倒带三消-单文件版.html` — 同一份文件，方便直接发送
-- `dist/rewind-match3-itch.zip` — itch.io 可直接上传的压缩包
